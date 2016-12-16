@@ -44,11 +44,6 @@ Vue.component('agent-info',{
         sellingCommission: '2.5'
     }
     },
-    watch:{
-      agencyName: function(value){
-        agentValues[0] = value
-      }
-    }
 })
 
 Vue.component('escrow-info',{

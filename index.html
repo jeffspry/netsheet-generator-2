@@ -75,12 +75,12 @@
       <div class="row">
         <div class="six columns">
           <label for="propertyAddress">Property Address</label>
-          <input v-model="propertyAddress" @changed="onChanged" class="u-full-width" id="autocomplete" name="propertyAddress" type="text" placeholder="1234 Main Street, Los Angeles, CA 90024" onFocus="geolocate()" />
+          <input v-model="propertyAddress" class="u-full-width" id="autocomplete" name="propertyAddress" type="text" placeholder="1234 Main Street, Los Angeles, CA 90024" onFocus="geolocate()" />
         </div>
         <div class="six columns">
         
           <label for="salesPrice">Sales Price</label>
-          <input v-model="salesPrice" @changed="onChanged" class="u-full-width" id="salesPrice" name="salesPrice" type="text" />
+          <input v-model="salesPrice" class="u-full-width" id="salesPrice" name="salesPrice" type="text" />
         </div>
       </div>
       <input type="hidden" id="locality" disabled="true"></input>
@@ -105,7 +105,7 @@
       <div class="row">
         <div class="six columns">
           <label for="agencyName">Agency Name</label>
-          <input v-model="agencyName" class="u-full-width awesomplete" id="agencyName" type="text" placeholder="eg. John Aaroe Group" list="agencies" />
+          <input v-model="agencyName" class="u-full-width awesomplete" id="agencyName" type="text" placeholder="" list="agencies" />
         </div>
         <div class="six columns">
           <label for="agentName">Agent Name</label>
