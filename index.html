@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <title>Net Sheet Generator</title>
+  <meta name="description" content="Net Sheet Generator">
+  <meta name="author" content="Jeff Spry">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Bitter:400,400i,700" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://unpkg.com/animate.css@3.5.1/animate.min.css" rel="stylesheet" type="text/css">
+
+
+  <link rel="icon" type="image/ico" href="images/favicon.ico">
+
+
+
+
+</head>
+<body>
+
+  <!--Header Image & Breadcrumbs-->
+  <div class="container" style="background-color: white; padding: 10px;" id='app'>
+    <div class="row" style="margin-top: 2%">
+      <img src="http://placehold.it/209x110" style="padding-bottom: 25px;">
+      <p class="breadcrumb">
+        <a href="#" v-for="view in allViews" @click="showView(view.sectionName, view.id)" :id="view.id" :name="view.sectionName">{{ view.fullName }} </a>
+      </p>
+    </div>
+    
+    <!--Component View-->
+    
+    <transition name="custom-classes-transition" enter-active-class="animated fadeIn" leave-active-class="animated fadeOutDown" mode="out-in">
+      <keep-alive>
+        <component :is="currentView"></component>
+      </keep-alive>
+    </transition>
+    
+    
+    
+    <div class="row">
+      <div class="six columns">
+        &nbsp;
+      </div>
+      <div class="six columns">
+        <a class="button u-pull-right" @click="nextView()" v-if="nextAllowed">Next <strong>>></strong></a>
+        <a class="button u-pull-right" v-else>Download PDF</a>
+        
+        <a class="button u-pull-right" @click="previousView()" v-if="prevAllowed"><strong><<</strong> Previous</a>
+      </div>
+    </div>    
+
+  </div>    
+
+
+
+
+
+
+
+  <template id="property-info">
+    
+    <div>
+      <!--Section Name-->
+      <div class="row">
+        <h4>Property Info</h4>
+      </div>
+      
+      <div class="row">
+        <div class="six columns">
+          <label for="propertyAddress">Property Address</label>
+          <input v-model="propertyAddress" @changed="onChanged" class="u-full-width" id="autocomplete" name="propertyAddress" type="text" placeholder="1234 Main Street, Los Angeles, CA 90024" onFocus="geolocate()" />
+        </div>
+        <div class="six columns">
+        
+          <label for="salesPrice">Sales Price</label>
+          <input v-model="salesPrice" @changed="onChanged" class="u-full-width" id="salesPrice" name="salesPrice" type="text" />
+        </div>
+      </div>
+      <input type="hidden" id="locality" disabled="true"></input>
+      <input type="hidden" id="street_number" disabled="true"></input>
+      <input type="hidden" id="route" disabled="true"></input>
+      <input type="hidden" id="administrative_area_level_1" disabled="true"></input>
+      <input type="hidden" id="postal_code" disabled="true"></input>
+      <input type="hidden" id="country" disabled="true"></input>
+    </div>
+  
+  </template>
+
+
+  <template id="agent-info">
+    
+    <div>
+      <!--Section Name-->
+      <div class="row">
+        <h4>Agent Info</h4>
+      </div>
+      
+      <div class="row">
+        <div class="six columns">
+          <label for="agencyName">Agency Name</label>
+          <input v-model="agencyName" class="u-full-width awesomplete" id="agencyName" type="text" placeholder="eg. John Aaroe Group" list="agencies" />
+        </div>
+        <div class="six columns">
+          <label for="agentName">Agent Name</label>
+          <input v-model="agentName"  class="u-full-width" id="agentName" type="text" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="six columns">
+          <label for="agentPhone">Agent Phone</label>
+          <input v-model="agentPhone" class="u-full-width" id="agentPhone" type="tel" placeholder="" />
+        </div>
+        <div class="six columns">
+          <label for="agentEmail">Agent Email</label>
+          <input v-model="agentEmail"  class="u-full-width" id="agentEmail" type="email" />
+        </div>
+      </div>
+      <datalist id="agencies">
+        <option value="John Aaroe Group" />
+        <option value="Keller Williams" />
+        <option value="Berkshire Hathaway" />
+        <option value="The Agency" />
+      </datalist>
+      <div class="row">
+        <div class="six columns">
+          <label for="listingCommission">Listing Commission Split</label>
+          <input v-model="listingCommission" class="u-full-width" id="listingCommission" type="text" placeholder="eg. 2.5% or Flat Amount" />
+        </div>
+        <div class="six columns">
+          <label for="sellingCommission">Selling Commission Split</label>
+          <input v-model="sellingCommission"  class="u-full-width" id="sellingCommission" type="text" placeholder="Leave blank to show lump commission" />
+        </div>
+      </div>
+    </div>
+  
+  </template>
+
+  <template id="escrow-info">
+    
+    <div>
+      <!--Section Name-->
+      <div class="row">
+        <h4>Escrow Info</h4>
+      </div>
+      
+      <div class="row">
+        <div class="six columns">
+          <label for="escrowOffice">Escrow Office</label>
+            <select class="u-full-width" id="escrowOffice">
+              <option value="officePas">Pasadena</option>
+              <option value="officeSS">Sunset</option>
+              <option value="officeSO">Sherman Oaks</option>
+              <option value="officeBH">Beverly Hills</option>
+            </select>
+        </div>
+        <div class="six columns">
+          <label for="officerName">Officer Name</label>
+          <input v-model="officerName"  class="u-full-width" id="officerName" type="text" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="six columns">
+          <label for="officerPhone">Officer Phone</label>
+          <input v-model="officerPhone" class="u-full-width" id="officerPhone" type="tel" placeholder="" />
+        </div>
+        <div class="six columns">
+          <label for="officerEmail">Officer Email</label>
+          <input v-model="officerEmail"  class="u-full-width" id="officerEmail" type="email" />
+        </div>
+      </div>      
+    </div>
+  
+  </template>
+
+  <template id="fees">
+    
+    <div>
+      <!--Section Name-->
+      <div class="row">
+        <h4>Fees</h4>
+      </div>
+      
+      <div class="row">
+        <div class="three columns fee-column">
+          <a v-for="category in categories" href="javascript:void(0);" class="button button-primary u-full-width">{{category.fullName}}</a>
+        </div>
+        <div class="nine columns scroll-y">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+      </div>
+
+    </div>
+  
+  </template>
+  
+
+  
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.4/vue.js" integrity="sha256-qTa3CnORUQE6UqqdoYevjWXPU8KadTXBW2yHAkpn5q8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.0/numeral.min.js"></script>
+  <script type="text/javascript" src="js/priceDisplay.js"></script>
+  <script type="text/javascript" src="js/app.js"></script>
+</body>
+</html>

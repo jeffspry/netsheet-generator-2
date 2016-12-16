@@ -1,0 +1,43 @@
+.fade-transition {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter, .fade-leave {
+  opacity: 0;
+}
+
+.breadcrumb {
+    font-size: .8em;
+}
+.breadcrumb a {
+    text-decoration: none;
+}
+.breadcrumb a:not(:last-child)::after{
+    content: ' > ';
+    pointer-events: none;
+    cursor: default;
+    color: black;
+}
+a.disabled {
+    background:#eee;
+    border-color: #ccc;
+    text-shadow:none;
+    cursor: not-allowed;
+}
+a.activeSection {
+    font-size: 1em;
+    font-style: italic;
+    font-weight: bolder;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
+.fee-column {
+}
+.scroll-y{
+    overflow-y: auto;
+    height: 260px;
+}
